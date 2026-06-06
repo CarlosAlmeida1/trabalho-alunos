@@ -24,7 +24,7 @@ class Aluno:
     frequencia: float
     categoria: CategoriaAluno
 
-def ler_alunos() -> Aluno:
+def adicionar_aluno() -> Aluno:
     '''
     Insere um *aluno* em uma lista de alunos.
     '''

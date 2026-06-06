@@ -7,9 +7,9 @@ class CategoriaAluno(Enum):
     '''
     Representa as categorias de um aluno na universidade.
     '''
-    GRADUACAO = auto(),
-    POS_GRADUACAO = auto(),
-    ENSINO_MEDIO_CAP = auto(),
+    GRADUACAO = auto()
+    POS_GRADUACAO = auto()
+    ENSINO_MEDIO_CAP = auto()
     INSTITUDO_DE_LINGUAS_ILG = auto()
 
 
@@ -59,7 +59,7 @@ def adicionar_aluno() -> Aluno:
 
 def inserir_aluno(alunos: list[Aluno], aluno: Aluno) -> None:
     """
-    Insere um aluno na lista de alunos.
+    Insere um aluno na lista de *aluno* na lista de *alunos* por ordem alfabética.
     Ra: 100
     Nome: Joao
     Média: 8.0
@@ -77,8 +77,13 @@ def inserir_aluno(alunos: list[Aluno], aluno: Aluno) -> None:
         if a.ra == aluno.ra:
             print("Aluno já está cadastrado")
             return
-
     alunos.append(aluno)
+
+    i = len(alunos) - 1
+
+    while i > 0 and alunos[i - 1].nome > alunos[i].nome:
+        alunos[i], alunos[i - 1] = alunos[i - 1], alunos[i]
+        i -= 1
 
 
 def imprime_lista(alunos: list[Aluno]) -> None:

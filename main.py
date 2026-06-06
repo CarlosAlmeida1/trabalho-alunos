@@ -24,7 +24,7 @@ class Aluno:
     frequencia: float
     categoria: CategoriaAluno
 
-def ler_alunos() -> Aluno:
+def adicionar_aluno() -> Aluno:
     '''
     Insere um *aluno* em uma lista de alunos.
     '''
@@ -120,7 +120,7 @@ def main() -> None:
         escolha = int(input("Escolha: "))
         if escolha == 1:
             # Entrada de dados - cria uma lista de alunos
-            aluno = ler_alunos()
+            aluno = adicionar_aluno()
             inserir_aluno(alunos, aluno)
         elif escolha == 2:
             # processamento/saída

@@ -24,6 +24,26 @@ class Aluno:
     frequencia: float
     categoria: CategoriaAluno
 
+def escolher_categoria() -> CategoriaAluno:
+    while True:
+        print("1 - GRADUACAO")
+        print("2 - POS_GRADUACAO")
+        print("3 - ENSINO_MEDIO_CAP")
+        print("4 - INSTITUDO_DE_LINGUAS_ILG")
+
+        opcao = int(input("Escolha a categoria: "))
+
+        if opcao == 1:
+            return CategoriaAluno.GRADUACAO
+        elif opcao == 2:
+            return CategoriaAluno.POS_GRADUACAO
+        elif opcao == 3:
+            return CategoriaAluno.ENSINO_MEDIO_CAP
+        elif opcao == 4:
+            return CategoriaAluno.INSTITUDO_DE_LINGUAS_ILG
+
+        print("Escolha inválida!")
+
 def adicionar_aluno() -> Aluno:
     '''
     Insere um *aluno* em uma lista de alunos.
@@ -32,28 +52,7 @@ def adicionar_aluno() -> Aluno:
     nome = input('Nome: ')
     media: float = float(input('Media: '))
     frequencia: float = float(input('Frequencia: '))
-
-    ## categoria
-    valido = False
-    while not valido:
-        print(f"1 - GRADUACAO\n2 - POS_GRADUACAO\n3 - ENSINO_MEDIO_CAP\n4 - INSTITUDO_DE_LINGUAS_ILG")
-        opcao = int((input("Escolha a opção de categoria:")))
-
-        if opcao == 1:
-            categoria = CategoriaAluno.GRADUACAO
-            valido = True
-        elif opcao == 2:
-            categoria = CategoriaAluno.POS_GRADUACAO
-            valido = True
-        elif opcao == 3:
-            categoria = CategoriaAluno.ENSINO_MEDIO_CAP
-            valido = True
-        elif opcao == 4:
-            categoria = CategoriaAluno.INSTITUDO_DE_LINGUAS_ILG
-            valido = True
-        else:
-            print("Escolha invalida!")
-
+    categoria = escolher_categoria()
 
     return Aluno(ra, nome, media, frequencia, categoria)
 
@@ -115,13 +114,48 @@ def imprime_lista(alunos: list[Aluno]) -> None:
         print(f'Categoria: {aluno.categoria.name}')
         print('**')
 
+def avg_geral_categoria(alunos: list[Aluno], categoria: CategoriaAluno) -> float:
+    """
+    Calcula a média por *categoria* da lista de *alunos*.
+
+    >>> alunos = [
+    ...     Aluno(1, 'Joao', 8.0, 70.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(2, 'Maria', 6.0, 80.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(3, 'Jose', 9.0, 90.0, CategoriaAluno.POS_GRADUACAO),
+    ... ]
+    >>> avg_geral_categoria(alunos, CategoriaAluno.GRADUACAO)
+    7.0
+
+    >>> alunos = [
+    ...     Aluno(1, 'Joao', 8.0, 70.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(2, 'Maria', 6.0, 80.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(3, 'Jose', 9.0, 90.0, CategoriaAluno.POS_GRADUACAO),
+    ... ]
+    >>> avg_geral_categoria(alunos, CategoriaAluno.POS_GRADUACAO)
+    9.0
+
+    """
+    soma: float = 0.0
+    quantidade: float = 0.0
+
+    for aluno in alunos:
+        if aluno.categoria == categoria:
+            soma += aluno.media
+            quantidade += 1
+
+    if quantidade == 0:
+        return 0
+
+    return soma / quantidade
+
+
 def main() -> None:
     alunos: list[Aluno] = []
 
     ## Menu
     sair: bool = False
     while not sair:
-        print(f"1 - Inserir Aluno\n2 - Imprime Lista\n3 - Sair")
+        print(f"1 - Inserir Aluno\n2 - Imprime Lista\n3 - Média por categoria\n4 - Sair")
         escolha = int(input("Escolha: "))
         if escolha == 1:
             # Entrada de dados - cria uma lista de alunos
@@ -131,6 +165,11 @@ def main() -> None:
             # processamento/saída
             imprime_lista(alunos)
         elif escolha == 3:
+            # média dos alunos por categoria
+            categoria = escolher_categoria()
+            media = avg_geral_categoria(alunos, categoria)
+            print(f"A média da categoria {categoria.name} é {media:.2f}")
+        elif escolha == 4:
             sair = True
         else:
             print("Escolha invalida!")

@@ -176,6 +176,32 @@ def alunos_acima_media_categoria(alunos : list[Aluno], categoria: CategoriaAluno
 
     return resultado
 
+def alunos_aprovados_categoria(alunos: list[Aluno], categoria : CategoriaAluno) -> list[Aluno]:
+    '''
+    Retorna uma lista com todos os alunos aprovados de uma
+    determinada categoria.
+
+    Um aluno é considerado aprovado se:
+    - média >= 6.0
+    - frequência >= 75.0
+
+    >>> alunos = [
+    ...     Aluno(1, 'Joao', 8.0, 80.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(2, 'Maria', 5.0, 90.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(3, 'Jose', 7.0, 70.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(4, 'Ana', 9.0, 85.0, CategoriaAluno.POS_GRADUACAO),
+    ... ]
+    >>> resultado = alunos_aprovados_categoria(alunos, CategoriaAluno.GRADUACAO)
+    >>> [aluno.nome for aluno in resultado]
+    ['Joao']
+    '''
+
+    resultado: list[Aluno] = []
+    for aluno in alunos:
+        if aluno.categoria == categoria and aluno.frequencia >= 75.0 and aluno.media >= 6.0:
+            resultado.append(aluno)
+
+    return resultado
 
 def main() -> None:
     alunos: list[Aluno] = []
@@ -183,7 +209,7 @@ def main() -> None:
     ## Menu
     sair: bool = False
     while not sair:
-        print(f"1 - Inserir Aluno\n2 - Imprime Lista\n3 - Média por categoria\n4 - Alunos Acima da Média da Categoria\n5 - Sair")
+        print(f"1 - Inserir Aluno\n2 - Imprime Lista\n3 - Média por categoria\n4 - Alunos Acima da Média da Categoria\n5 - Alunos Aprovados por Categoria\n6 - Sair")
         escolha = int(input("Escolha: "))
         if escolha == 1:
             # Entrada de dados - cria uma lista de alunos
@@ -205,7 +231,16 @@ def main() -> None:
             else:
                 imprime_lista(resultado)
         elif escolha == 5:
+            categoria = escolher_categoria()
+            resultado = alunos_aprovados_categoria(alunos, categoria)
+
+            if len(resultado) == 0:
+                print("Nenhum aluno aprovado encontrado")
+            else:
+                imprime_lista(resultado)
+        elif escolha == 6:
             sair = True
+
         else:
             print("Escolha invalida!")
 

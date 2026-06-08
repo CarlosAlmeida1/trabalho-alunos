@@ -148,6 +148,34 @@ def avg_geral_categoria(alunos: list[Aluno], categoria: CategoriaAluno) -> float
 
     return soma / quantidade
 
+def alunos_acima_media_categoria(alunos : list[Aluno], categoria: CategoriaAluno) -> list[Aluno]:
+    '''
+    Retorna uma lista com os *alunos* da *categoria* informada
+    que possuem média acima da média geral da categoria.
+
+    >>> alunos = [
+    ...     Aluno(1, 'Joao', 8.0, 70.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(2, 'Maria', 6.0, 80.0, CategoriaAluno.GRADUACAO),
+    ...     Aluno(3, 'Jose', 9.0, 90.0, CategoriaAluno.GRADUACAO)
+    ... ]
+    >>> resultado = alunos_acima_media_categoria(
+    ...     alunos,
+    ...     CategoriaAluno.GRADUACAO
+    ... )
+    >>> [aluno.nome for aluno in resultado]
+    ['Joao', 'Jose']
+    '''
+
+    media_categoria = avg_geral_categoria(alunos, categoria)
+
+    resultado: list[Aluno] = []
+
+    for aluno in alunos:
+        if aluno.categoria == categoria and aluno.media > media_categoria:
+            resultado.append(aluno)
+
+    return resultado
+
 
 def main() -> None:
     alunos: list[Aluno] = []
@@ -155,7 +183,7 @@ def main() -> None:
     ## Menu
     sair: bool = False
     while not sair:
-        print(f"1 - Inserir Aluno\n2 - Imprime Lista\n3 - Média por categoria\n4 - Sair")
+        print(f"1 - Inserir Aluno\n2 - Imprime Lista\n3 - Média por categoria\n4 - Alunos Acima da Média da Categoria\n5 - Sair")
         escolha = int(input("Escolha: "))
         if escolha == 1:
             # Entrada de dados - cria uma lista de alunos
@@ -170,6 +198,13 @@ def main() -> None:
             media = avg_geral_categoria(alunos, categoria)
             print(f"A média da categoria {categoria.name} é {media:.2f}")
         elif escolha == 4:
+            categoria = escolher_categoria()
+            resultado = alunos_acima_media_categoria(alunos, categoria)
+            if len(resultado) == 0:
+                print("Nenhum aluno encontrado")
+            else:
+                imprime_lista(resultado)
+        elif escolha == 5:
             sair = True
         else:
             print("Escolha invalida!")
